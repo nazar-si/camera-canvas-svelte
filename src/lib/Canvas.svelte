@@ -30,6 +30,8 @@
   export let maxX = 1000;
   export let maxY = 1000;
   export let hideBoudary = false;
+  let className = "";
+  export { className as class };
   let scaleBuff = scale;
 
   let startScale = 1;
@@ -113,6 +115,24 @@
     }
     fill(...args: Parameters<typeof this.p5.fill>): void {
       this.p5.fill(...args);
+    }
+    setDash(line: number, gap: number) {
+      this.p5.drawingContext.setLineDash([line, gap]);
+    }
+    resetDash() {
+      this.p5.drawingContext.setLineDash([]);
+    }
+    setShadow(x: number, y: number, blur: number, color: string) {
+      this.p5.drawingContext.shadowOffsetX = x;
+      this.p5.drawingContext.shadowOffsetY = y;
+      this.p5.drawingContext.shadowBlur = blur;
+      this.p5.drawingContext.shadowColor = color;
+    }
+    resetShadow() {
+      this.p5.drawingContext.shadowOffsetX = 0;
+      this.p5.drawingContext.shadowOffsetY = 0;
+      this.p5.drawingContext.shadowBlur = 0;
+      this.p5.drawingContext.shadowColor = "#0000";
     }
     line(x1: number, y1: number, x2: number, y2: number): void {
       this.p5.line(this.uvx(x1), this.uvy(y1), this.uvx(x2), this.uvy(y2));
@@ -343,6 +363,9 @@
     bounded(x: number, min: number, max: number): boolean {
       return x >= min && x <= max;
     }
+    bound(x: number, min: number, max: number): number {
+      return Math.min(Math.max(x, min), max);
+    }
     region(
       x: number,
       y: number,
@@ -366,6 +389,9 @@
       maxY: number
     ): boolean {
       return this.region(this.mx, this.my, minX, minY, maxX, maxY);
+    }
+    rectMouse(x: number, y: number, w: number, h: number): boolean {
+      return this.region(this.mx, this.my, x, y, x + w, y + h);
     }
     distance(x1: number, y1: number, x2: number, y2: number): number {
       return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
@@ -397,6 +423,8 @@
       if (typeof backgroundColor === "string") p5.background(backgroundColor);
       else p5.background(...backgroundColor);
       p5.translate(p5.width / 2, p5.height / 2);
+      c.resetDash();
+      c.resetShadow();
 
       scale = scale + (scaleBuff - scale) * 0.2;
       c.mouseX = p5.mouseX;
@@ -506,6 +534,7 @@
 <div
   on:contextmenu={(e) => e.preventDefault()}
   on:wheel={(e) => e.preventDefault()}
+  class={className}
 >
   <Canv {sketch} />
 </div>

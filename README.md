@@ -112,6 +112,11 @@ Under it's hood this library implements functions of p5.js, which are modified a
 2. [noiseDetail()](https://p5js.org/reference/#/p5/noiseDetail)
 3. [noiseSeed()](https://p5js.org/reference/#/p5/noiseSeed)
 
+**Translate**
+1. [translate()](https://p5js.org/reference/#/p5/translate)
+2. [pop()](https://p5js.org/reference/#/p5/pop)
+3. [push()](https://p5js.org/reference/#/p5/push)
+
 In order to preserve rest of the functionality other p5 methods can be accessed through variable: `cx.p5`.
 
 Some new functions present, that can be used to switch between coordinates:

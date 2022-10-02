@@ -66,6 +66,7 @@ Camera can be setup with several parameters passed as props to Canvas component.
 
 ```
 
+## Draw functions
 Under it's hood this library implements functions of p5.js, which are modified and put into `cx` object which is passed into events, `update` and `init` methods. All the basic drawing functions from p5.js which can be found in [p5 documentation](https://p5js.org/reference/) were recreated to work with this grid system. The list of supported functions and their references on p5:
 
 **2D Primitives**:
@@ -78,7 +79,7 @@ Under it's hood this library implements functions of p5.js, which are modified a
 7. [rect()](https://p5js.org/reference/#/p5/rect)
 8. [square()](https://p5js.org/reference/#/p5/square)
 9. [triangle()](https://p5js.org/reference/#/p5/triangle)
-10. 
+
 **Curves**
 1. [bezier()](https://p5js.org/reference/#/p5/bezier)
 2. [bezierDetail()](https://p5js.org/reference/#/p5/bezierDetail)
@@ -86,7 +87,7 @@ Under it's hood this library implements functions of p5.js, which are modified a
 4. [bezierTangent()](https://p5js.org/reference/#/p5/bezierTangent)
 5. [curve()](https://p5js.org/reference/#/p5/curve)
 6. [curvePoint()](https://p5js.org/reference/#/p5/curvePoint)
-7. 
+
 **Vertex**
 1. [beginContour()](https://p5js.org/reference/#/p5/beginContour)
 2. [beginShape()](https://p5js.org/reference/#/p5/beginShape)
@@ -105,6 +106,11 @@ Under it's hood this library implements functions of p5.js, which are modified a
 5. [noFill()](https://p5js.org/reference/#/p5/noFill)
 6. [noStroke()](https://p5js.org/reference/#/p5/noStroke)
 7. [background()](https://p5js.org/reference/#/p5/background) ! removes grid
+
+**Noise**
+1. [noise()](https://p5js.org/reference/#/p5/noise)
+2. [noiseDetail()](https://p5js.org/reference/#/p5/noiseDetail)
+3. [noiseSeed()](https://p5js.org/reference/#/p5/noiseSeed)
 
 In order to preserve rest of the functionality other p5 methods can be accessed through variable: `cx.p5`.
 
@@ -125,3 +131,84 @@ iny(y: number): number
 in(c: number): number
 ```
 They will return coordinates transformed from coordinate on the screen to the coordinate on the plane. 
+
+Some constants from p5 were implemented:
+1. `POINTS`
+2. `POINTS`
+3. `LINES`
+4. `TRIANGLES`
+5. `TRIANGLE_FAN`
+6. `TRIANGLE_STRIP`
+7. `QUADS`
+8. `QUAD_STRIP`
+9. `CLOSE`
+10. `PI`
+11. `TAU`
+12. `HPI`
+13. `DEGREES`
+14. `RADIANS`
+
+
+And some new constants were added:
+```ts
+cx.mx : number
+cx.my : number
+// x and y coordinates of the mouse cursor on the plane
+cx.mouseX : number
+cx.mouseY : number
+// x and y coordinates of the mouse cursor on the screen relative to canvas center
+
+cx.mouseOutside : boolean
+// returns true if the mouse outside of the canvas
+```
+## Other useful functions
+Along side p5 functions this library implements new ones.
+```ts
+bound(x: number, min: number, max: number) : number
+//returns value of x constrained by min and max values
+
+bounded(x: number, min: number, max: number) : boolean
+//checks if value x is between min and max values
+
+region(
+      x: number,
+      y: number,
+      minX: number,
+      minY: number,
+      maxX: number,
+      maxY: number
+    ): boolean 
+//checks if value x in and y in [minX, maxY]x[minY, maxY] region
+
+rectBounded(
+      x: number,
+      y: number,
+      x0: number,
+      y0: number,
+      w: number,
+      h: number
+    ): boolean
+//same as region, but uses top left corner coordinate (x0, y0), w - width and h - height to describe rectangular region
+
+boundedMouseX(min: number, max: number): boolean
+boundedMouseY(min: number, max: number): boolean
+// check for mouse x and mouse y constrains
+
+regionMouse(
+      minX: number,
+      minY: number,
+      maxX: number,
+      maxY: number
+    ): boolean
+// acts as region() for mouse x and y coordinates
+
+rectMouse(x: number, y: number, w: number, h: number): boolean
+//acts as rectBounded() for mouse x and y coordinates
+
+
+distance(x1: number, y1: number, x2: number, y2: number): number
+// return distance between (x1, y1) and (x2, y2)
+
+distanceMouse(x: number, y: number): number
+// returns distance between (x,y) and mouse position on plane
+```

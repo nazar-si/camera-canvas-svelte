@@ -134,6 +134,15 @@
       this.p5.drawingContext.shadowBlur = 0;
       this.p5.drawingContext.shadowColor = "#0000";
     }
+    pop() {
+      this.p5.pop();
+    }
+    push() {
+      this.p5.push();
+    }
+    translate(x: number, y: number) {
+      this.p5.translate(this.uv(x), this.uv(y));
+    }
     line(x1: number, y1: number, x2: number, y2: number): void {
       this.p5.line(this.uvx(x1), this.uvy(y1), this.uvx(x2), this.uvy(y2));
     }
@@ -360,6 +369,12 @@
     noise(...args: Parameters<typeof this.p5.noise>) {
       return this.p5.noise(...args);
     }
+    noiseDetail(...args: Parameters<typeof this.p5.noiseDetail>) {
+      return this.p5.noiseDetail(...args);
+    }
+    noiseSeed(...args: Parameters<typeof this.p5.noiseSeed>) {
+      return this.p5.noiseSeed(...args);
+    }
     bounded(x: number, min: number, max: number): boolean {
       return x >= min && x <= max;
     }
@@ -375,6 +390,16 @@
       maxY: number
     ): boolean {
       return x >= minX && x <= maxX && y >= minY && y <= maxY;
+    }
+    rectBounded(
+      x: number,
+      y: number,
+      x0: number,
+      y0: number,
+      w: number,
+      h: number
+    ): boolean {
+      return x >= x0 && x <= x0 + w && y >= y0 && y <= y0 + h;
     }
     boundedMouseX(min: number, max: number): boolean {
       return this.bounded(this.mx, min, max);
@@ -427,8 +452,8 @@
       c.resetShadow();
 
       scale = scale + (scaleBuff - scale) * 0.2;
-      c.mouseX = p5.mouseX;
-      c.mouseY = p5.mouseY;
+      c.mouseX = p5.mouseX - p5.width / 2;
+      c.mouseY = p5.mouseY - p5.width / 2;
       c.mx = c.inx(p5.mouseX - p5.width / 2);
       c.my = c.iny(p5.mouseY - p5.height / 2);
       if (startDrag) {
@@ -475,13 +500,14 @@
       if (!hideBoudary) {
         p5.stroke(128, 60);
         p5.strokeWeight(3);
-        c.line(minX, ty, minX, by);
-        c.line(maxX, ty, maxX, by);
-        c.line(lx, maxY, rx, maxY);
-        c.line(lx, minY, rx, minY);
+        p5.noFill();
+        c.rect(minX, minY, maxX - minX, maxY - minY);
       }
       c.mouseOutside =
-        c.mouseX < 0 || c.mouseX > width || c.mouseY < 0 || c.mouseY > height;
+        c.mouseX < -p5.width / 2 ||
+        c.mouseX > p5.width / 2 ||
+        c.mouseY < -p5.height / 2 ||
+        c.mouseY > p5.height / 2;
 
       p5.noStroke();
       p5.fill(255);

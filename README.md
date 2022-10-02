@@ -29,7 +29,7 @@ Basic usage:
 
 As result we get following canvas: 
 
-![example 1](./images/ex1.png)
+![example 0](./images/ex0.png)
 
 Camera can be setup with several parameters passed as props to Canvas component. Following properties are:
 ```ts
@@ -217,3 +217,139 @@ distance(x1: number, y1: number, x2: number, y2: number): number
 distanceMouse(x: number, y: number): number
 // returns distance between (x,y) and mouse position on plane
 ```
+
+## Examples
+### Click and translate
+```ts
+update=(cx) => {
+  cx.strokeWeight(3);
+  cx.setDash(5, 5);
+  cx.stroke(128);
+  cx.bezier(-1, -1.5, 0, -1.5, 0, 1.5, 1, 1.5);
+  cx.stroke(0, 132, 255);
+  cx.resetDash();
+  cx.fill(0, 132, 255, 100);
+  cx.setShadow(0, 0, 15, "#08f8");
+  cx.rect(-2, -2, 0.9, 0.9, 0.2);
+  cx.translate(3, 3); 
+  cx.rect(-2, -2, 0.9, 0.9, 0.2);
+}
+doubleClicked= (e, cx) => {
+  if (cx.rectMouse(-2, -2, 1, 1)) {
+    alert("Rectangle 1 double-clicked");
+  }
+  if (cx.rectMouse(1, 1, 1, 1)) {
+    alert("Rectangle 2 double-clicked");
+  }
+}
+```
+
+**Result:**
+
+![example 1](./images/ex1.png)
+
+Here alert will be show if double click performed on one of the squares. `cx.translate` function shifts coordinates from (0, 0) to (3, 3), thus second rectangle is draw 3 grid units to left and 3 grid units to bottom relative to the first one.
+
+### Mouse coordinates
+```ts
+update=(cx) => {
+  cx.strokeWeight(3);
+  cx.stroke(128);
+  cx.line(-0.5, 0.5, 2.5, 0.5);
+  cx.line(-2.5, -1.5, -2.5, 2.5);
+  cx.fill(200);
+  cx.circle(-0.5, 0.5, 0.3);
+  cx.circle(2.5, 0.5, 0.3);
+  cx.circle(-2.5, -1.5, 0.3);
+  cx.circle(-2.5, 2.5, 0.3);
+  cx.stroke(0, 132, 255);
+  cx.fill(0, 132, 255, 100);
+  cx.setShadow(0, 0, 15, "#08f8");
+  cx.rect(cx.bound(cx.mx - 0.5, -1, 2), 0, 1, 1, 0.2);
+  cx.rect(-3, cx.bound(cx.my - 0.5, -2, 2), 1, 1, 0.2);
+}
+```
+**Result:**
+
+![example 2](./images/ex2.png)
+
+Two rectangles are being bounded to mouseX and mouseY so that they move with mouse. `cx.bound` constrains value of mouse coordinate between two positions so that squares don't go out of border.
+
+### Relative coordinates
+```ts
+update=(cx) => {
+  cx.stroke(0, 132, 255);
+
+  cx.strokeWeight(16);
+  cx.point(-1, 0);
+  cx.strokeWeight(4);
+  cx.line(-2, -1, -2, 1);
+
+  cx.strokeWeight(cx.uv(0.5));
+  cx.point(1, 0);
+  cx.strokeWeight(cx.uv(0.1));
+  cx.line(2, -1, 2, 1);
+}
+```
+
+**Result:**
+
+![example 3](./images/ex3.png)
+
+Here two coordinates systems are being used to set size for line and point stroke. Regular one sets size unrelated to screen. After applying `cx.uv()` to the stroke weight on the right side, point's and line's stroke remains relative to zoom, so it's changes when you zoom in or out.
+
+### Screen space draw
+```ts
+update=(cx) => {
+  cx.stroke(0, 132, 255);
+  cx.fill(0, 132, 255, 100);
+  cx.setShadow(0, 0, 15, "#08f8");
+  cx.rect(cx.inx(32), cx.iny(32), cx.in(64), cx.in(64), cx.in(8));
+  cx.rect(-1, -1, 2, 2);
+  cx.stroke(128);
+  cx.setShadow(0, 0, 15, "#0002");
+  cx.fill(128, 100);
+  cx.p5.rect(-64, -64, 64, 64, 8);
+}
+```
+
+**Result:**
+
+![example 4](./images/ex4.png)
+Here we draw three rectangles using screen space through `cx.p5.rect` drawing function or through `cx.rect` applying coordinates transform before passing coordinates. As result two rectangles are drawn on screen and do not move or zoom with the plane, while regular rectangle `cx.rect(-1, -1, 2, 2)` stays bound to plane.
+
+### Noise and shape
+```ts
+update=(cx) => {
+  let t = cx.p5.frameCount / 60;
+  cx.stroke(0, 132, 255);
+  cx.fill(0, 132, 255, 100);
+  cx.setShadow(0, 0, 15, "#08f8");
+  cx.beginShape();
+  cx.vertex(0, cx.noise(0, t) * 4);
+  let n = Math.floor(cx.PI * 50);
+  let d = 4;
+  for (let i = 1; i < n - 3; i += 1) {
+    let r = cx.noise((i / n) * d, t) * 4;
+    let x = Math.sin((i / n) * cx.TAU) * r;
+    let y = Math.cos((i / n) * cx.TAU) * r;
+    cx.vertex(x, y);
+  }
+  cx.beginContour();
+  cx.vertex(0, cx.noise(0, t) * 2);
+  for (let i = 1; i < n - 3; i += 1) {
+    let r = cx.noise((i / n) * d, t) * 2;
+    let x = Math.sin(-(i / n) * cx.TAU) * r;
+    let y = Math.cos(-(i / n) * cx.TAU) * r;
+    cx.vertex(x, y);
+  }
+  cx.endContour();
+  cx.endShape(cx.CLOSE);
+}
+```
+
+**Result:**
+
+![example 5](./images/ex5.png)
+
+Here you can see figure that changes over time as frameCount increases each second by 60. We use `cx.beginFigure()` to start drawing figure and then in the loop we define it's vertices. Than in that figure we start contour `cx.beginContour()` to cut-out inside of that shape. then we close contour and figure via `cx.endContour(); cx.endFigure()`. As result we get random figure with random shaped hole in it.

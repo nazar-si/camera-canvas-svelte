@@ -1,4 +1,5 @@
 # camera-canvas-svelte
+[Github](https://github.com/nazar-si/camera-canvas-svelte)
 
 This is the package for creating simple p5 canvas in **Svelte** that has basic camera functionality build-in. With this you can draw different objects inside this environment with automatic screen coordinates to plane coordinates translation. This package also supports grid display as well as some mouse events capturing.
 
@@ -29,7 +30,7 @@ Basic usage:
 
 As result we get following canvas: 
 
-![example 0](./images/ex0.png)
+![example 0](https://raw.githubusercontent.com/nazar-si/camera-canvas-svelte/main/images/ex0.png)
 
 Camera can be setup with several parameters passed as props to Canvas component. Following properties are:
 ```ts
@@ -246,7 +247,7 @@ doubleClicked= (e, cx) => {
 
 **Result:**
 
-![example 1](./images/ex1.png)
+![example 1](https://raw.githubusercontent.com/nazar-si/camera-canvas-svelte/main/images/ex1.png)
 
 Here alert will be show if double click performed on one of the squares. `cx.translate` function shifts coordinates from (0, 0) to (3, 3), thus second rectangle is draw 3 grid units to left and 3 grid units to bottom relative to the first one.
 
@@ -271,7 +272,7 @@ update=(cx) => {
 ```
 **Result:**
 
-![example 2](./images/ex2.png)
+![example 2](https://raw.githubusercontent.com/nazar-si/camera-canvas-svelte/main/images/ex2.png)
 
 Two rectangles are being bounded to mouseX and mouseY so that they move with mouse. `cx.bound` constrains value of mouse coordinate between two positions so that squares don't go out of border.
 
@@ -294,7 +295,7 @@ update=(cx) => {
 
 **Result:**
 
-![example 3](./images/ex3.png)
+![example 3](https://raw.githubusercontent.com/nazar-si/camera-canvas-svelte/main/images/ex3.png)
 
 Here two coordinates systems are being used to set size for line and point stroke. Regular one sets size unrelated to screen. After applying `cx.uv()` to the stroke weight on the right side, point's and line's stroke remains relative to zoom, so it's changes when you zoom in or out.
 
@@ -315,7 +316,7 @@ update=(cx) => {
 
 **Result:**
 
-![example 4](./images/ex4.png)
+![example 4](https://raw.githubusercontent.com/nazar-si/camera-canvas-svelte/main/images/ex4.png)
 Here we draw three rectangles using screen space through `cx.p5.rect` drawing function or through `cx.rect` applying coordinates transform before passing coordinates. As result two rectangles are drawn on screen and do not move or zoom with the plane, while regular rectangle `cx.rect(-1, -1, 2, 2)` stays bound to plane.
 
 ### Noise and shape
@@ -350,6 +351,6 @@ update=(cx) => {
 
 **Result:**
 
-![example 5](./images/ex5.png)
+![example 5](https://raw.githubusercontent.com/nazar-si/camera-canvas-svelte/main/images/ex5.png)
 
 Here you can see figure that changes over time as frameCount increases each second by 60. We use `cx.beginFigure()` to start drawing figure and then in the loop we define it's vertices. Than in that figure we start contour `cx.beginContour()` to cut-out inside of that shape. then we close contour and figure via `cx.endContour(); cx.endFigure()`. As result we get random figure with random shaped hole in it.

@@ -440,6 +440,9 @@
     text(str: string | number | boolean | object | any[], x:number, y:number, x2?:number, y2?:number) {
       this.p5.text(str, this.uvx(x), this.uvy(y), !isNaN(x2)?this.uvx(x2):undefined, !isNaN(y2)?this.uvy(y2):undefined);
     }
+    textSize(theSize:number){
+      this.p5.textSize(this.uv(theSize));
+    }
   }
   
   const sketch: Sketch = (p5: p5type) => {

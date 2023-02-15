@@ -1,6 +1,4 @@
-<script lang="ts" context="module">
-  
-</script>
+
 <script lang="ts">
   import Canv, { type p5 } from "p5-svelte";
   import type { Sketch } from "p5-svelte";

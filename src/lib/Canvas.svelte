@@ -435,7 +435,10 @@
       return this.p5.color(...args);
     }
     lerpColor(from, to, value): typeof this.p5.lerpColor {
-      return this.p5.color(from, to, value);
+      return this.p5.lerpColor(from, to, value);
+    }
+    text(str: string | number | boolean | object | any[], x:number, y:number, x2?:number, y2?:number) {
+      this.p5.text(str, this.uvx(x), this.uvy(y), !isNaN(x2)?this.uvx(x2):undefined, !isNaN(y2)?this.uvy(y2):undefined);
     }
   }
   

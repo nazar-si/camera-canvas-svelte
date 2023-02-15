@@ -441,7 +441,10 @@
       this.p5.text(str, this.uvx(x), this.uvy(y), !isNaN(x2)?this.uvx(x2):undefined, !isNaN(y2)?this.uvy(y2):undefined);
     }
     textSize(theSize:number, minScreenSize?: number, maxScreenSize?: number){
-      this.p5.textSize(Math.min(maxScreenSize, Math.max(minScreenSize, this.uv(theSize))));
+      let size = this.uv(theSize);
+      if (maxScreenSize && maxScreenSize < size) size = maxScreenSize 
+      if (minScreenSize && minScreenSize > size) size = minScreenSize 
+      this.p5.textSize(size);
     }
   }
   
